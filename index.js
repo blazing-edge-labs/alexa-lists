@@ -43,19 +43,22 @@ function init (token) {
   function createNewListItem (listName, listItemName, status = 'active') {
     validate.listItemName(listItemName)
 
-    return getList(listName, status).then(function (list) {
+    return getList(listName, status)
+    .then(function (list) {
       const body = {
         value: listItemName,
         status
       }
       return makeRequestFn(routes.createNewListItem(list.listId), body)
     })
+    .catch(console.error)
   }
 
   function deleteCustomList (listName) {
     validate.listName(listName)
 
-    return getListMetadata().then(function (lists) {
+    return getListMetadata()
+    .then(function (lists) {
       const list = utils.findSpecificListName(lists, listName)
 
       if (!list) {
@@ -63,6 +66,7 @@ function init (token) {
       }
       return makeRequestFn(routes.deleteCustomList(list.listId))
     })
+    .catch(console.error)
   }
 
   function deleteListItem (listName, listItemName, status = 'active') {
@@ -80,6 +84,7 @@ function init (token) {
     .then(function (listItem) {
       return makeRequestFn(routes.deleteListItem(listName, listItemName))
     })
+    .catch(console.error)
   }
 
   function getList (listName, status = 'active') {
@@ -96,6 +101,7 @@ function init (token) {
       return makeRequestFn(routes.getList(list.listId, status))
     })
     .then(utils.stripPropertyFromResponse())
+    .catch(console.error)
   }
 
   function getListItem (listName, listItemName, status = 'active') {
@@ -107,17 +113,20 @@ function init (token) {
       return makeRequestFn(routes.getListItem(list.listId, listItem.id))
     })
     .then(utils.stripPropertyFromResponse())
+    .catch(console.error)
   }
 
   function getListMetadata () {
     return makeRequestFn(routes.getListMetadata())
     .then(utils.stripPropertyFromResponse('body.lists'))
+    .catch(console.error)
   }
 
   function updateCustomList (listName, body) {
     validate.listName(listName)
 
-    return getListMetadata().then(function (lists) {
+    return getListMetadata()
+    .then(function (lists) {
       const list = utils.findSpecificListName(lists, listName)
       const reqBody = _.assign(_.pick(list, ['name', 'state', 'version']), body)
 
@@ -127,6 +136,7 @@ function init (token) {
 
       return makeRequestFn(routes.updateCustomList(list.listId), reqBody)
     })
+    .catch(console.error)
   }
 
   function updateListItem (listName, listItemName, body) {
@@ -145,6 +155,7 @@ function init (token) {
       validate.updateListItem(body)
       return makeRequestFn(routes.updateListItem(list.listId, listItem.id), reqBody)
     })
+    .catch(console.error)
   }
 
   return {

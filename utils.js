@@ -14,9 +14,10 @@ function stripPropertyFromResponse (property = 'body') {
 }
 
 function findSpecificListName (lists, listName, status) {
+  const compareFn = compareStrings(listName, 'name')
   return _.find(lists, function (list) {
     let isStatusOk = status ? status === list.state : true
-    return compareStrings(listName, 'name') && isStatusOk
+    return compareFn(list) && isStatusOk
   })
 }
 
