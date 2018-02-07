@@ -1,0 +1,20 @@
+{
+  "name": "alexa-lists",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard --verbose | snazzy"
+  },
+  "keywords": [],
+  "author": "Blazing Edge",
+  "license": "ISC",
+  "dependencies": {
+    "got": "^8.0.3",
+    "lodash": "^4.17.5"
+  },
+  "devDependencies": {
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3"
+  }
+}
