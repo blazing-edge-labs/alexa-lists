@@ -60,7 +60,7 @@ function init (token) {
 
     return getListMetadata()
     .then(function (lists) {
-      const list = utils.findSpecificListName(lists, listName)
+      const list = utils.findSpecificList(lists, listName)
 
       if (!list) {
         throw Error('List not found!')
@@ -70,17 +70,22 @@ function init (token) {
     .then(utils.stripPropertyFromResponse())
   }
 
-  function deleteListItem (listName, listItemName, status = 'active') {
+  function deleteListItem (listName, listItemName) {
     validate.listItemName(listItemName)
 
-    return getList(listName, status)
-    .then(function (list) {
-      const listItem = utils.findSpecificListItem(list.items, listItemName)
+    return getListMetadata()
+    .then(function (lists) {
+      const list = utils.findSpecificList(lists, listName)
 
       if (!list) {
         throw Error('List not found!')
       }
-      return makeRequestFn(routes.deleteListItem(list.listId, listItem.id))
+
+      return makeRequestFn(routes.getList(list.listId, list.state))
+    })
+    .then(function (list) {
+      const listItem = utils.findSpecificListItem(_.get(list, 'body.items'), listItemName)
+      return makeRequestFn(routes.deleteListItem(_.get(list, 'body.listId'), listItem.id))
     })
     .then(utils.stripPropertyFromResponse())
   }
@@ -91,7 +96,7 @@ function init (token) {
 
     return getListMetadata()
     .then(function (lists) {
-      const list = utils.findSpecificListName(lists, listName, status)
+      const list = utils.findSpecificList(lists, listName, status)
 
       if (!list) {
         throw Error('List not found!')
@@ -122,7 +127,7 @@ function init (token) {
 
     return getListMetadata()
     .then(function (lists) {
-      const list = utils.findSpecificListName(lists, listName)
+      const list = utils.findSpecificList(lists, listName)
       const reqBody = _.assign(_.pick(list, ['name', 'state', 'version']), body)
 
       if (!list) {
@@ -141,7 +146,7 @@ function init (token) {
 
     return getListMetadata()
     .then(function (lists) {
-      const list = utils.findSpecificListName(lists, listName)
+      const list = utils.findSpecificList(lists, listName)
       return makeRequestFn(routes.getList(list.listId, list.state))
     })
     .then(function (list) {

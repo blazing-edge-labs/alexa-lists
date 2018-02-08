@@ -13,7 +13,7 @@ function stripPropertyFromResponse (property = 'body') {
   }
 }
 
-function findSpecificListName (lists, listName, status) {
+function findSpecificList (lists, listName, status) {
   const compareFn = compareStrings(listName, 'name')
   return _.find(lists, function (list) {
     let isStatusOk = status ? status === list.state : true
@@ -27,7 +27,7 @@ function findSpecificListItem (listItems, listItemName) {
 
 module.exports = {
   compareStrings,
+  findSpecificList,
   findSpecificListItem,
-  findSpecificListName,
   stripPropertyFromResponse
 }
