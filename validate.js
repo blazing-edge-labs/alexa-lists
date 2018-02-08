@@ -19,7 +19,7 @@ function validateListItemName (listItemName) {
 }
 
 function validateUpdateCustomList (body) {
-  if (!_(['name', 'state', 'version']).difference(_.keys(body)).isEmpty()) {
+  if (_(['name', 'state', 'version']).union(_.keys(body)).size() !== 3) {
     console.error(body)
     throw Error('Body has invalid properties. Only "name", "state" and "version" are allowed!')
   }
@@ -37,7 +37,7 @@ function validateUpdateCustomList (body) {
 }
 
 function validateUpdateListItem (body) {
-  if (!_(['status', 'value', 'version']).difference(_.keys(body)).isEmpty()) {
+  if (_(['status', 'value', 'version']).union(_.keys(body)).size() !== 3) {
     console.error(body)
     throw Error('Body has invalid properties. Only "value", "status" and "version" are allowed!')
   }

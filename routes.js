@@ -18,15 +18,15 @@ function createRoute (url, method) {
 /*
   ------------------------------------------
   ----------------- LEGEND -----------------
-  Get lists metadata                        GET v2/householdlists/
+  Create a custom list                      POST  v2/householdlists/
+  Create a new list item                    POST  v2/householdlists/{listId}/items
+  Delete a custom list                      DELETE  v2/householdlists/{listId}
+  Delete a list item                        DELETE  v2/householdlists/{listId}/items/{itemId}
   Get a list                                GET v2/householdlists/{listId}/{status}
   Get a list item                           GET v2/householdlists/{listId}/items/{itemId}
-  Update a list item                        PUT v2/householdlists/{listId}/items/{itemId}
-  Create a new list item                    POST  v2/householdlists/{listId}/items
-  Delete a list item                        DELETE  v2/householdlists/{listId}/items/{itemId}
-  Create a custom list                      POST  v2/householdlists/
+  Get lists metadata                        GET v2/householdlists/
   Update a custom list's `name` or `status` PUT v2/householdlists/{listId}
-  Delete a custom list                      DELETE  v2/householdlists/{listId}
+  Update a list item                        PUT v2/householdlists/{listId}/items/{itemId}
   ------------------------------------------
   --------------- END LEGEND ---------------
 */

@@ -71,21 +71,16 @@ function init (token) {
   }
 
   function deleteListItem (listName, listItemName, status = 'active') {
-    let listData
-
     validate.listItemName(listItemName)
 
     return getList(listName, status)
     .then(function (list) {
-      listData = utils.findSpecificListItem(list.items, listItemName)
+      const listItem = utils.findSpecificListItem(list.items, listItemName)
 
       if (!list) {
         throw Error('List not found!')
       }
-      return getListItem(listName, listItemName)
-    })
-    .then(function (listItem) {
-      return makeRequestFn(routes.deleteListItem(listData.listId, listItem.id))
+      return makeRequestFn(routes.deleteListItem(list.listId, listItem.id))
     })
     .then(utils.stripPropertyFromResponse())
   }
@@ -159,7 +154,8 @@ function init (token) {
       const reqBody = _.assign(_.pick(listItem, ['status', 'value', 'version']), body)
 
       validate.updateListItem(reqBody)
-      return makeRequestFn(routes.updateListItem(list.listId, listItem.id), reqBody)
+
+      return makeRequestFn(routes.updateListItem(_.get(list, 'body.listId'), listItem.id), reqBody)
     })
     .then(utils.stripPropertyFromResponse())
   }
