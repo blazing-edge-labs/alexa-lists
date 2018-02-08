@@ -3,11 +3,16 @@ Working with lists requires proper permissions for your skill, read the permissi
 
 Before making the requests you need to provide the access token. That is why the `init` function needs to be called first. All examples use the [alexa-app](https://github.com/alexa-js/alexa-app) module.
 
+```
+npm install --save @blazingedge/alexa-lists
+```
+
+
 ### Permissions card
 If you don't have the permissions to work with lists, then you should send the permissions `card` to the user.
 #### Example
 ```
-async function sendPermissionsCard (req, res) {
+function sendPermissionsCard (req, res) {
   return res.card(alexaLists.getPermissionsCard()).send()
 }
 ```

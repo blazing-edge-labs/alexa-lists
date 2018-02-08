@@ -1,0 +1,9 @@
+getListMetadataIntent get all lists
+getListIntent get list {listName}
+createCustomListIntent create list {listName}
+createNewListItemIntent create item {listItemName} in {listName}
+deleteCustomListIntent delete list {listName}
+deleteListItemIntent delete item {listItemName} in {listName}
+getListItemIntent get item {listItemName} from {listName}
+updateCustomListIntent update {listName} to {newListName}
+updateListItemIntent update item {listItemName} from {listName} to {newListItemName}

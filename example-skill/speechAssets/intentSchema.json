@@ -1,0 +1,76 @@
+{
+  "intents": [{
+    "intent": "getListMetadataIntent"
+  }, {
+    "intent": "getListIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }]
+  }, {
+    "intent": "AMAZON.StopIntent"
+  }, {
+    "intent": "createCustomListIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }]
+  }, {
+    "intent": "createNewListItemIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }, {
+      "name": "listItemName",
+      "type": "listItemNameSlot"
+    }]
+  }, {
+    "intent": "deleteCustomListIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }]
+  }, {
+    "intent": "deleteListItemIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }, {
+      "name": "listItemName",
+      "type": "listItemNameSlot"
+    }]
+  }, {
+    "intent": "getListItemIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }, {
+      "name": "listItemName",
+      "type": "listItemNameSlot"
+    }]
+  }, {
+    "intent": "updateCustomListIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }, {
+      "name": "listItemName",
+      "type": "listItemNameSlot"
+    }, {
+      "name": "newListName",
+      "type": "listNameSlot"
+    }]
+  }, {
+    "intent": "updateListItemIntent",
+    "slots": [{
+      "name": "listName",
+      "type": "listNameSlot"
+    }, {
+      "name": "listItemName",
+      "type": "listItemNameSlot"
+    }, {
+      "name": "newListItemName",
+      "type": "listItemNameSlot"
+    }]
+  }]
+}
