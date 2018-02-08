@@ -28,6 +28,7 @@ function makeRequest (apiToken) {
 }
 
 function init (token) {
+  token = token || process.env.ALEXA_API_TOKEN
   const makeRequestFn = makeRequest(token)
 
   function createCustomList (listName) {
@@ -38,20 +39,20 @@ function init (token) {
       state: 'active'
     }
     return makeRequestFn(routes.createCustomList(), body)
+    .then(utils.stripPropertyFromResponse())
   }
 
   function createNewListItem (listName, listItemName, status = 'active') {
     validate.listItemName(listItemName)
 
-    return getList(listName, status)
-    .then(function (list) {
+    return getList(listName, status).then(function (list) {
       const body = {
         value: listItemName,
         status
       }
       return makeRequestFn(routes.createNewListItem(list.listId), body)
     })
-    .catch(console.error)
+    .then(utils.stripPropertyFromResponse())
   }
 
   function deleteCustomList (listName) {
@@ -66,15 +67,17 @@ function init (token) {
       }
       return makeRequestFn(routes.deleteCustomList(list.listId))
     })
-    .catch(console.error)
+    .then(utils.stripPropertyFromResponse())
   }
 
   function deleteListItem (listName, listItemName, status = 'active') {
+    let listData
+
     validate.listItemName(listItemName)
 
     return getList(listName, status)
-    .then(function (lists) {
-      const list = utils.findSpecificListName(lists, listName, status)
+    .then(function (list) {
+      listData = utils.findSpecificListItem(list.items, listItemName)
 
       if (!list) {
         throw Error('List not found!')
@@ -82,9 +85,9 @@ function init (token) {
       return getListItem(listName, listItemName)
     })
     .then(function (listItem) {
-      return makeRequestFn(routes.deleteListItem(listName, listItemName))
+      return makeRequestFn(routes.deleteListItem(listData.listId, listItem.id))
     })
-    .catch(console.error)
+    .then(utils.stripPropertyFromResponse())
   }
 
   function getList (listName, status = 'active') {
@@ -101,7 +104,6 @@ function init (token) {
       return makeRequestFn(routes.getList(list.listId, status))
     })
     .then(utils.stripPropertyFromResponse())
-    .catch(console.error)
   }
 
   function getListItem (listName, listItemName, status = 'active') {
@@ -113,13 +115,11 @@ function init (token) {
       return makeRequestFn(routes.getListItem(list.listId, listItem.id))
     })
     .then(utils.stripPropertyFromResponse())
-    .catch(console.error)
   }
 
   function getListMetadata () {
     return makeRequestFn(routes.getListMetadata())
     .then(utils.stripPropertyFromResponse('body.lists'))
-    .catch(console.error)
   }
 
   function updateCustomList (listName, body) {
@@ -134,9 +134,10 @@ function init (token) {
         throw Error('List not found')
       }
 
+      validate.updateCustomList(reqBody)
       return makeRequestFn(routes.updateCustomList(list.listId), reqBody)
     })
-    .catch(console.error)
+    .then(utils.stripPropertyFromResponse())
   }
 
   function updateListItem (listName, listItemName, body) {
@@ -149,13 +150,18 @@ function init (token) {
       return makeRequestFn(routes.getList(list.listId, list.state))
     })
     .then(function (list) {
-      const listItem = utils.findSpecificListItem(list.items, listItemName)
-      const reqBody = _.assign(_.pick(listItem, ['version', 'value', 'status']), body)
+      const listItem = utils.findSpecificListItem(_.get(list, 'body.items'), listItemName)
 
-      validate.updateListItem(body)
+      if (!listItem) {
+        throw Error('List item not found!')
+      }
+
+      const reqBody = _.assign(_.pick(listItem, ['status', 'value', 'version']), body)
+
+      validate.updateListItem(reqBody)
       return makeRequestFn(routes.updateListItem(list.listId, listItem.id), reqBody)
     })
-    .catch(console.error)
+    .then(utils.stripPropertyFromResponse())
   }
 
   return {
